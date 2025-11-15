@@ -40,8 +40,11 @@ export const authOptions: NextAuthOptions = {
 
         try {
           console.log('Making request to login API');
+          let baseURL =
+            process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000/';
+
           const response = await axios.post(
-            'http://localhost:3000/api/login', // Make sure to use absolute URL
+            `${baseURL}api/login`, // Make sure to use absolute URL
             data,
             {
               headers: {
