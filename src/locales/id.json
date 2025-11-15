@@ -1,0 +1,9 @@
+{
+  "kembali": "Kembali",
+  "IDN": "IDN",
+  "E-mail": "Alamat E-mail",
+  "Password": "Kata Sandi",
+  "Name is required": "Nama wajib diisi",
+  "Invalid email address": "Alamat e-mail tidak valid",
+  "Password must be at least 6 characters": "Kata sandi harus terdiri dari minimal 6 karakter"
+}
