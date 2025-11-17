@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Link from 'next/link';
 
 import {
   DropdownMenu,
@@ -8,8 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import { LogOut } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
+import DynamicBreadcrumb from '@/components/ui/breadcrumb-list';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession();
@@ -18,7 +28,9 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
     <div className='max-w-[1440px] mx-auto overflow-hidden h-screen border'>
       <div className=' h-16 border-b-2 items-center flex justify-between px-4'>
         <div>
-          <div className='font-bold text-[18px]'>Job List</div>
+          {/* <div className='font-bold text-[18px]'>Job List</div> */}
+
+          <DynamicBreadcrumb />
         </div>
 
         <DropdownMenu>
@@ -47,7 +59,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className='py-8 px-4'>{children}</div>
+      <div className='py-5 px-4'>{children}</div>
     </div>
   );
 };
