@@ -11,9 +11,7 @@ const LayoutMain = ({ children }: { children: ReactNode }) => {
   return (
     <ProtectLayout>
       <MainLayout>
-        {session?.user?.role === 'admin' && <>{children}</>}
-
-        {session?.user?.role === 'applicant' && <>{children}</>}
+        {session?.user?.role === 'admin' ? <>{children}</> : <>No Permission</>}
       </MainLayout>
     </ProtectLayout>
   );

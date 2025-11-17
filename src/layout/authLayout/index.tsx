@@ -16,12 +16,18 @@ const AuthLayout = ({
   children: React.ReactNode;
 }) => {
   let { t } = useTranslation();
-  const { status } = useSession();
+  const { status, data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
     if (status === 'authenticated') {
-      router.push('/job-list');
+      if (session?.user?.role === 'admin') {
+        router.push('/job-list');
+      }
+
+      if (session?.user?.role === 'applicant') {
+        router.push('/job-list-candidate');
+      }
     }
   }, [status, router]);
 

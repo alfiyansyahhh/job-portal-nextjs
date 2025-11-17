@@ -11,13 +11,11 @@ import { useTranslation } from 'react-i18next';
 import { loginSchema } from '@/schemas';
 import { Button } from '../ui/button';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 
 const LoginForm = () => {
   const [isPending, setisPending] = useState(false);
 
   let { t } = useTranslation();
-  let router = useRouter();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -38,9 +36,8 @@ const LoginForm = () => {
     })
       .then((data: any) => {
         setisPending(false);
-
         if (data?.status === 200) {
-          router.push('/job-list');
+          console.log('redirect to job list2');
         } else {
           toast.error('Something went wrong.');
         }
