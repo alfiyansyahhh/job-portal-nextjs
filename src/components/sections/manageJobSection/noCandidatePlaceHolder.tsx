@@ -9,7 +9,7 @@ const NoCandidatePlaceHolder = () => {
         alt='manage-job'
         width={276}
         height={260}
-        className='mx-auto'
+        className='mx-auto w-40 sm:w-auto'
       />
       <div className='text-[16px] font-bold'>No candidates found</div>
       <div className='text-[14px] text-[#757575]'>

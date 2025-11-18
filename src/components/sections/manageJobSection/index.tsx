@@ -6,6 +6,7 @@ import { useJobs } from '@/zustand/store/useJobs';
 import { useBreadcrumbStore } from '@/zustand/store/useBreadCrumb';
 import { CandidateTable } from '@/components/table/tableListCandidate';
 import CardActionJob from '@/components/card/cardActionJob';
+import StatusBadge from '@/components/ui/statusBadge';
 
 const ManageJobSection = ({ jobId, list }: { jobId: any; list: any }) => {
   let { getJobById } = useJobs();
@@ -24,6 +25,7 @@ const ManageJobSection = ({ jobId, list }: { jobId: any; list: any }) => {
           {dataJOb?.title}
         </div>
         <CardActionJob job={dataJOb} />
+        <StatusBadge status={dataJOb.status} />
       </div>
       <div className='border p-5 rounded-md min-h-[500px]'>
         {list?.length === 0 && <NoCandidatePlaceHolder />}
