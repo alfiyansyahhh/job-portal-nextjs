@@ -27,7 +27,7 @@ export function FormBadgeSelect<T extends FieldValues>({
   });
 
   return (
-    <div className='flex items-center justify-between w-full gap-4'>
+    <div className='flex flex-wrap items-center justify-between w-full gap-4'>
       <label className='text-[14px] font-medium text-[#404040]'>{label}</label>
 
       <div className='flex gap-2'>
@@ -36,7 +36,7 @@ export function FormBadgeSelect<T extends FieldValues>({
             key={option.value}
             onClick={() => !option.disabled && field.onChange(option.value)}
             className={cn(
-              'px-4 py-1 rounded-full cursor-pointer border text-sm',
+              'px-3 sm:px-4 py-1 rounded-full cursor-pointer border text-sm',
               option.disabled
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed border-gray-200'
                 : field.value === option.value

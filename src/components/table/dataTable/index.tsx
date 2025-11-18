@@ -74,7 +74,7 @@ export function DataTable<T extends { id: string }>({
 
   return (
     <div className='w-full'>
-      <div className='flex items-center py-4'>
+      <div className='flex items-center gap-3 py-4'>
         {filterColumn && (
           <Input
             placeholder={`Filter ${filterColumn}...`}

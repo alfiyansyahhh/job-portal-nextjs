@@ -49,7 +49,10 @@ const CardActionJob = ({ job }: { job: any }) => {
       <CreateNewJobDialog {...{ isOpen, setIsOpen, jobId }} />
 
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger
+          tooltip='Action'
+          asChild
+        >
           <Button
             variant='ghost'
             className='h-8 w-8 p-0 bg-gray-100'

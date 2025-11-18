@@ -3,8 +3,17 @@
 import * as React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react';
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+interface CustomDropdownMenuTriggerProps
+  extends React.ComponentProps<typeof DropdownMenuPrimitive.Trigger> {
+  tooltip?: string;
+}
 
 function DropdownMenu({
   ...props
@@ -29,13 +38,37 @@ function DropdownMenuPortal({
 }
 
 function DropdownMenuTrigger({
+  tooltip,
+  children,
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
+}: CustomDropdownMenuTriggerProps) {
+  if (!tooltip) {
+    return (
+      <DropdownMenuPrimitive.Trigger
+        data-slot='dropdown-menu-trigger'
+        {...props}
+      >
+        {children}
+      </DropdownMenuPrimitive.Trigger>
+    );
+  }
+
   return (
-    <DropdownMenuPrimitive.Trigger
-      data-slot='dropdown-menu-trigger'
-      {...props}
-    />
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DropdownMenuPrimitive.Trigger
+            data-slot='dropdown-menu-trigger'
+            {...props}
+          >
+            {children}
+          </DropdownMenuPrimitive.Trigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{tooltip}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 

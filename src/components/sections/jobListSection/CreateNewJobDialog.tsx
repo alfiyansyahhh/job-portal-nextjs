@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
+import { MoreHorizontal, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createJobSchema } from '@/schemas';
@@ -12,6 +12,14 @@ import { Form } from '@/components/ui/form';
 import CreateNewJobForm from '@/components/form/create-new-job-form';
 import { createNewJob, deleteJob, editJob } from '@/zustand/action/jobAction';
 import { useJobs } from '@/zustand/store/useJobs';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 type CreateNewJobModalProps = {
   isOpen: boolean;
@@ -126,7 +134,7 @@ const CreateNewJobModal = ({
     <>
       {isOpen && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
-          <div className='bg-white overflow-hidden relative w-[900px] max-w-full rounded-lg min-h-[30vh] max-h-[80vh] '>
+          <div className='bg-white  mx-5 overflow-hidden relative w-[900px] max-w-full rounded-lg min-h-[30vh] max-h-[80vh] '>
             <div className='flex justify-between border-b items-center mb-4  p-6'>
               <h2 className='text-[18px] font-bold'>Job Opening</h2>
               <button
@@ -148,12 +156,61 @@ const CreateNewJobModal = ({
               <Form {...form}>
                 <form
                   onSubmit={handleSubmit}
-                  className=' gap-2 flex space-y-6'
+                  className=' gap-2 flex flex-wrap-reverse mb-6 justify-end'
                 >
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      tooltip='Action'
+                      asChild
+                      className='block sm:hidden'
+                    >
+                      <Button
+                        variant='ghost'
+                        className=' bg-gray-100'
+                      >
+                        <span className='sr-only'>Open menu</span>
+                        <MoreHorizontal />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className='block sm:hidden'
+                      align='end'
+                    >
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
+                      <DropdownMenuItem>
+                        <Button
+                          variant='default'
+                          className='h-8   rounded-md w-[106px]'
+                          type='submit'
+                          disabled={!form.formState.isValid}
+                          loading={isPending}
+                          data-status='Draft'
+                        >
+                          Draft Job
+                        </Button>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuItem>
+                        <Button
+                          variant='danger'
+                          className='h-8  rounded-md w-[106px]'
+                          type='submit'
+                          disabled={!form.formState.isValid}
+                          loading={isPending}
+                          data-status='Delete'
+                        >
+                          Detele
+                        </Button>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
                   {jobId && (
                     <Button
                       variant='danger'
-                      className='h-8 rounded-md w-[106px]'
+                      className='h-8 hidden sm:block rounded-md w-[106px]'
                       type='submit'
                       disabled={!form.formState.isValid}
                       loading={isPending}
@@ -165,7 +222,7 @@ const CreateNewJobModal = ({
 
                   <Button
                     variant='default'
-                    className='h-8 rounded-md w-[106px]'
+                    className='h-8  hidden sm:block  rounded-md w-[106px]'
                     type='submit'
                     disabled={!form.formState.isValid}
                     loading={isPending}

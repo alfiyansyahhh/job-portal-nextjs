@@ -76,8 +76,8 @@ const CreateNewJobForm = ({
 
             <div>Job Salary</div>
 
-            <div className='flex gap-3 w-full '>
-              <div className='w-[50%]'>
+            <div className='flex flex-col sm:flex-row gap-3 w-full '>
+              <div className='w-full sm:w-[50%]'>
                 <FormNumberInput
                   control={form.control}
                   name='salary_range.min'
@@ -87,7 +87,7 @@ const CreateNewJobForm = ({
                   isPending={isPending}
                 />
               </div>
-              <div className='w-[50%]'>
+              <div className='w-full sm:w-[50%]'>
                 <FormNumberInput
                   control={form.control}
                   name='salary_range.max'

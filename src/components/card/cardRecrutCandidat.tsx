@@ -7,7 +7,7 @@ const CardRecrutCandidat = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
+    <div className='mx-3'>
       <CreateNewJobDialog {...{ isOpen, setIsOpen }} />
 
       <div className='w-full sm:w-[300px] bg-red-200 h-[168px] rounded-2xl relative overflow-hidden p-6 text-white'>
@@ -35,7 +35,7 @@ const CardRecrutCandidat = () => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

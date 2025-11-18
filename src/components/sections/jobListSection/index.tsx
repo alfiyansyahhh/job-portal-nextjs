@@ -34,7 +34,7 @@ const JobListSection = ({ list }: { list: any }) => {
   }, []);
 
   return (
-    <>
+    <div className='sm:min-w-[400px] mx-3'>
       <CreateNewJobDialog {...{ isOpen, setIsOpen, jobId }} />
 
       <div className='mt-5 sm:mx-3 pb-40'>
@@ -42,7 +42,7 @@ const JobListSection = ({ list }: { list: any }) => {
           jobs.map((job: any, i: number) => (
             <div
               key={i}
-              className='h-auto sm:h-[156px] p-6 relative mt-4 bg-[#FFFFFF] shadow-lg rounded-2xl'
+              className='h-auto lg:h-[156px] p-6 relative mt-4 bg-[#FFFFFF] shadow-lg rounded-2xl'
             >
               <div className='flex gap-3 mb-4'>
                 <StatusBadge status={job.status} />
@@ -81,7 +81,7 @@ const JobListSection = ({ list }: { list: any }) => {
           <NoJobsPlaceholder />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
