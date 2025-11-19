@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 
 const ApplyJob = () => {
   return (
-    <ProtectLayout>
-      <ApplyJobSection />
-    </ProtectLayout>
+    // <ProtectLayout>
+    <ApplyJobSection />
+    // </ProtectLayout>
   );
 };
 
