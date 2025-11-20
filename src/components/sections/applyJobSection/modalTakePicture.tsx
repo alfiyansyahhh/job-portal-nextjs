@@ -7,32 +7,27 @@ import { ChevronRight, X } from 'lucide-react';
 import Image from 'next/image';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
-const ModalTAkePicture = ({
+const ModalTakePicture = ({
   isOpen,
   setIsOpen,
+  capturedImage,
+  setCapturedImage,
+  handleSubmitCapture,
 }: {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  capturedImage: any;
+  setCapturedImage: Dispatch<SetStateAction<string | null>>;
+  handleSubmitCapture: (file: File | null) => void;
 }) => {
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [capturedFile, setCapturedFile] = useState<File | null>(null);
   const [isRetakePicture, setIsRetakePicture] = useState(false);
 
   const handleCapture = (imageData: { img: string; file: File }) => {
     setCapturedImage(imageData.img);
     setCapturedFile(imageData.file);
-    console.log('Captured image:', imageData.img); // Menampilkan gambar
-    console.log('Captured file:', imageData.file); // Menampilkan file
-  };
-
-  const handleFileUpload = (file: File) => {
-    console.log('File uploaded:', file);
-    // Logic untuk upload file ke server atau lainnya
-  };
-
-  const handlePhotoUpload = (photo: string) => {
-    console.log('Photo uploaded:', photo);
-    // Logic untuk upload photo (data URL) ke server atau lainnya
+    console.log('Captured image:', imageData.img);
+    console.log('Captured file:', imageData.file);
   };
 
   const retakePicture = () => {
@@ -124,6 +119,10 @@ const ModalTAkePicture = ({
                 <Button
                   variant='primary'
                   className='rounded-[8px]'
+                  onClick={() => {
+                    handleSubmitCapture(capturedFile);
+                    setIsOpen(false);
+                  }}
                 >
                   Submit
                 </Button>
@@ -136,7 +135,7 @@ const ModalTAkePicture = ({
   );
 };
 
-export default ModalTAkePicture;
+export default ModalTakePicture;
 
 // Custom Gesture Detection (misalnya deteksi gesture tertentu)
 const customDetectGesture = (lm: Landmark[]): any => {

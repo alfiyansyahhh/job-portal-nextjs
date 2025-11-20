@@ -4,7 +4,7 @@ import { FormInput } from '@/components/ui/form-input';
 import { Form } from '@/components/ui/form';
 import { FormSelect } from '@/components/ui/form-select';
 import { FormTextarea } from '@/components/ui/form-textArea';
-import { FormNumberInput } from '@/components/ui/form-inpur-number';
+import { FormNumberInput } from '@/components/ui/form-input-number';
 import { FormBadgeSelect } from '@/components/ui/form-badge-select';
 import { createJobSchema } from '@/schemas';
 import { UseFormReturn } from 'react-hook-form';

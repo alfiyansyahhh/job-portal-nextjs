@@ -16,6 +16,7 @@ export type Job = {
   status: string;
   profile_requirements?: Record<string, string>;
   list_card?: Record<string, string>;
+  application_form: any;
 };
 
 type JobsState = {

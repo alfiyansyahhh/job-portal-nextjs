@@ -79,7 +79,8 @@ export const FormInput = <T extends FieldValues>(props: FormInputProps<T>) => {
                 labelWeight
               )}
             >
-              {t(label)} <div className='text-red-500 -ml-2'>*</div>
+              {t(label)}{' '}
+              {required && <div className='text-red-500 -ml-2'>*</div>}
             </FormLabel>
 
             <div className={cn('flex items-center gap-2 w-full', inputWidth)}>

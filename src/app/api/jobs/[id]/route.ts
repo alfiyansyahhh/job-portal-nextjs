@@ -21,16 +21,33 @@ export async function GET(
     return NextResponse.json({ message: 'Job not found' }, { status: 404 });
   }
 
+  const profileKeys = Object.keys(job.profile_requirements) as Array<
+    keyof typeof job.profile_requirements
+  >;
+
+  const applicationForm = {
+    sections: [
+      {
+        title: 'Minimum Profile Information Required',
+        fields: profileKeys
+          .filter((key) => job.profile_requirements[key] !== 'off')
+          .map((key) => ({
+            key: key,
+            validation: {
+              required: job.profile_requirements[key] === 'mandatory',
+            },
+          })),
+      },
+    ],
+  };
+
   const jobCandidates = job.candidate_ids
     .map((candidateId) => candidate.find((c) => c.id === candidateId))
-    .filter(Boolean); //
+    .filter(Boolean);
 
-  // if (jobCandidates.length === 0) {
-  //   return NextResponse.json(
-  //     { message: 'No candidates found for this job' },
-  //     { status: 404 }
-  //   );
-  // }
-
-  return NextResponse.json({ ...job, candidates: jobCandidates || [] });
+  return NextResponse.json({
+    ...job,
+    application_form: applicationForm,
+    candidates: jobCandidates || [],
+  });
 }
