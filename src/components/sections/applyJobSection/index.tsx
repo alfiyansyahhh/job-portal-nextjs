@@ -11,67 +11,65 @@ import { Job } from '@/zustand/store/useJobs';
 import { useRouter } from 'next/navigation';
 import { Form } from '@/components/ui/form';
 
+const buildProfileRequirementsSchema = (profileRequirements: any[]) => {
+  const schema: Record<string, any> = {};
+
+  profileRequirements.forEach((fieldConfig) => {
+    const { key, validation } = fieldConfig;
+
+    const isRequired = validation?.required;
+
+    switch (key) {
+      case 'email':
+        schema[key] = isRequired
+          ? z.string().email('Invalid email').min(1, `${key} is required`)
+          : z.string().optional();
+        break;
+      case 'date_of_birth':
+        schema[key] = isRequired
+          ? z.date().min(1, `${key} is required`)
+          : z.any().optional();
+        break;
+      case 'photo_profile':
+        schema[key] = isRequired
+          ? z
+              .instanceof(File)
+              .refine((file) => file.size > 0, 'Photo profile is required')
+              .refine(
+                (file) => file.type.startsWith('image/'),
+                'Invalid file type. Only image files are allowed'
+              )
+          : z.any().optional();
+        break;
+      default:
+        schema[key] = isRequired
+          ? z.string().min(1, `${key} is required`)
+          : z.string().optional();
+        break;
+    }
+  });
+
+  return z.object(schema);
+};
+
 const ApplyJobSection = ({ dataJob }: { dataJob?: Job }) => {
   const [isOpenCamp, setIsOpenCamp] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-
   let router = useRouter();
-
-  const buildProfileRequirementsSchema = (profileRequirements: any[]) => {
-    const schema: Record<string, any> = {};
-
-    profileRequirements.forEach((fieldConfig) => {
-      const { key, validation } = fieldConfig;
-
-      const isRequired = validation?.required;
-
-      switch (key) {
-        case 'email':
-          schema[key] = isRequired
-            ? z.string().email('Invalid email').min(1, `${key} is required`)
-            : z.string().optional();
-          break;
-        case 'date_of_birth':
-          schema[key] = isRequired
-            ? z.date().min(1, `${key} is required`)
-            : z.any().optional();
-          break;
-        case 'photo_profile':
-          schema[key] = isRequired
-            ? z
-                .instanceof(File)
-                .refine((file) => file.size > 0, 'Photo profile is required')
-                .refine(
-                  (file) => file.type.startsWith('image/'),
-                  'Invalid file type. Only image files are allowed'
-                )
-            : z.instanceof(File).optional();
-          break;
-        default:
-          schema[key] = isRequired
-            ? z.string().min(1, `${key} is required`)
-            : z.string().optional();
-          break;
-      }
-    });
-
-    console.log(schema, 'schema2');
-
-    return z.object(schema);
-  };
 
   const profileRequirements =
     // dataJob?.application_form?.sections[0]
-    //   ?.fields ||
+    //   ?.fields
+    //   ||
     [
       { key: 'full_name', validation: { required: true } },
-      { key: 'photo_profile', validation: { required: true } },
-      { key: 'gender', validation: { required: true } },
+      { key: 'photo_profile', validation: { required: false } },
+      { key: 'gender', validation: { required: false } },
       { key: 'domicile', validation: { required: false } },
-      { key: 'email', validation: { required: true } },
-      { key: 'phone_number', validation: { required: true } },
-      { key: 'linkedin_link', validation: { required: true } },
+      { key: 'email', validation: { required: false } },
+      { key: 'phone_number', validation: { required: false } },
+      { key: 'linkedin_link', validation: { required: false } },
       { key: 'date_of_birth', validation: { required: false } },
     ];
 
@@ -105,11 +103,12 @@ const ApplyJobSection = ({ dataJob }: { dataJob?: Job }) => {
   };
 
   const handleSubmit = form.handleSubmit(async (values) => {
-    // setisPending(true);
+    console.log('sasdasd', values);
+    router.push('/apply-success');
   });
 
   return (
-    <div className='relative w-full my-5  sm:max-w-[700px] bg-white border h-[95vh] mx-auto '>
+    <div className='relative w-full my-5  sm:max-w-[700px] bg-white sm:border h-[95vh] mx-auto '>
       <ModalTakePicture
         handleSubmitCapture={handleSubmitCapture}
         capturedImage={capturedImage}
@@ -117,8 +116,8 @@ const ApplyJobSection = ({ dataJob }: { dataJob?: Job }) => {
         isOpen={isOpenCamp}
         setIsOpen={setIsOpenCamp}
       />
-      <div className=' p-[40px]'>
-        <div className='flex  gap-2 items-center justify-between mb-7'>
+      <div className=' sm:p-[40px]'>
+        <div className='flex px-4 sm:px-0 gap-2 items-center justify-between mb-7'>
           <div className='flex gap-4 items-center'>
             <Button
               variant='outline'
@@ -132,9 +131,9 @@ const ApplyJobSection = ({ dataJob }: { dataJob?: Job }) => {
             </div>
           </div>
 
-          <div>ℹ️ This field required to fill</div>
+          <div className='hidden sm:block'>ℹ️ This field required to fill</div>
         </div>
-        <div className='max-h-[75vh] pb-10 px-4 overflow-auto'>
+        <div className='max-h-[84vh] sm:max-h-[75vh] pb-10 px-4 overflow-auto'>
           <ApplyJobForm
             form={form}
             isPending={isPending}
@@ -146,7 +145,7 @@ const ApplyJobSection = ({ dataJob }: { dataJob?: Job }) => {
         </div>
       </div>
 
-      <div className='border-t w-full bottom-0 absolute px-10 py-6'>
+      <div className='border-t w-full bg-white -bottom-6 sm:bottom-0 absolute px-10 py-3 sm:py-6'>
         <Form {...form}>
           <form
             onSubmit={handleSubmit}
@@ -156,7 +155,6 @@ const ApplyJobSection = ({ dataJob }: { dataJob?: Job }) => {
               type='submit'
               variant='primary'
               className='w-full'
-              disabled={form.formState.isValid}
             >
               Submit
             </Button>

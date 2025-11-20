@@ -22,17 +22,28 @@ const ModalTakePicture = ({
 }) => {
   const [capturedFile, setCapturedFile] = useState<File | null>(null);
   const [isRetakePicture, setIsRetakePicture] = useState(false);
+  const [tempCapturedImage, setTempCapturedImage] = useState(capturedImage);
 
   const handleCapture = (imageData: { img: string; file: File }) => {
-    setCapturedImage(imageData.img);
+    setTempCapturedImage(imageData.img);
     setCapturedFile(imageData.file);
-    console.log('Captured image:', imageData.img);
-    console.log('Captured file:', imageData.file);
   };
 
   const retakePicture = () => {
-    setCapturedImage(null);
+    setTempCapturedImage(null);
     setIsRetakePicture(true);
+  };
+
+  const handleClose = () => {
+    retakePicture();
+    setIsOpen(false);
+  };
+
+  const handleSubmit = () => {
+    setCapturedImage(tempCapturedImage);
+    handleSubmitCapture(capturedFile);
+    retakePicture();
+    setIsOpen(false);
   };
 
   return (
@@ -48,11 +59,11 @@ const ModalTakePicture = ({
             </div>
             <X
               className='absolute right-7 top-7 cursor-pointer'
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
             />
 
             <div className='my-4'>
-              {!capturedImage && (
+              {!tempCapturedImage && (
                 <WebCamGesture
                   width={640}
                   height={480}
@@ -63,9 +74,9 @@ const ModalTakePicture = ({
                 />
               )}
 
-              {capturedImage && (
+              {tempCapturedImage && (
                 <img
-                  src={capturedImage}
+                  src={tempCapturedImage}
                   alt='captured'
                   width={640}
                   height={480}
@@ -79,8 +90,6 @@ const ModalTakePicture = ({
               The system will automatically capture the image once the final
               pose is detected.
             </div>
-
-            {/* <Button onClick={retakePicture}>RetakePicture</Button> */}
 
             {!capturedImage && (
               <div className='flex gap-3 my-6 w-full justify-center items-center'>
@@ -108,7 +117,7 @@ const ModalTakePicture = ({
               </div>
             )}
 
-            {capturedImage && (
+            {tempCapturedImage && (
               <div className='flex gap-3 mx-auto justify-center'>
                 <Button
                   variant='outline'
@@ -119,10 +128,7 @@ const ModalTakePicture = ({
                 <Button
                   variant='primary'
                   className='rounded-[8px]'
-                  onClick={() => {
-                    handleSubmitCapture(capturedFile);
-                    setIsOpen(false);
-                  }}
+                  onClick={handleSubmit}
                 >
                   Submit
                 </Button>

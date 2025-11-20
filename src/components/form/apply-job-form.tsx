@@ -28,7 +28,7 @@ const renderField = (
   isPending: boolean
 ) => {
   const isRequired = fieldConfig.validation.required;
-  console.log(fieldConfig, 'fieldConfig');
+
   switch (field) {
     case 'full_name':
       return (
@@ -40,7 +40,7 @@ const renderField = (
           type='text'
           placeholder='Enter your full name'
           isPending={isPending}
-          // required={isRequired}
+          required={isRequired}
         />
       );
 

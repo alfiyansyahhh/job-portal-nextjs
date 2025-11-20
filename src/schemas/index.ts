@@ -37,3 +37,14 @@ export const createJobSchema = z.object({
     })
     .optional(),
 });
+
+export const profileSchema = z.object({
+  full_name: z.string().nonempty('Full name is required'),
+  photo_profile: z.string().optional(),
+  gender: z.string().optional(),
+  domicile: z.string().optional(),
+  email: z.string().optional(),
+  phone_number: z.string().optional(),
+  linkedin_link: z.string().optional(),
+  date_of_birth: z.string().optional(),
+});

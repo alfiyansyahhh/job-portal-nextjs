@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import Link from 'next/link';
 
 import {
   DropdownMenu,
@@ -11,13 +10,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { LogOut } from 'lucide-react';
+import { LogIn, LogOut } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import DynamicBreadcrumb from '@/components/ui/breadcrumb-list';
+import { useRouter } from 'next/navigation';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const { data: session } = useSession();
-
+  let router = useRouter();
   return (
     <div className='mx-auto overflow-hidden h-screen '>
       <div className=' shadow-md'>
@@ -35,19 +35,37 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end'>
               <DropdownMenuLabel>
-                <div className='font-bold text-md'> {session?.user?.name}</div>
-                <div className='text-sm'> {session?.user?.email}</div>
+                {session && (
+                  <>
+                    <div className='font-bold text-md'>
+                      {' '}
+                      {session?.user?.name}
+                    </div>
+                    <div className='text-sm'> {session?.user?.email}</div>
+                  </>
+                )}
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => {
-                  localStorage.clear();
-                  signOut();
-                }}
-              >
-                <LogOut size={18} />
-                <div>Sign Out</div>
-              </DropdownMenuItem>
+              {session ? (
+                <DropdownMenuItem
+                  onClick={() => {
+                    localStorage.clear();
+                    signOut();
+                  }}
+                >
+                  <LogOut size={18} />
+                  <div>Sign Out</div>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('login');
+                  }}
+                >
+                  <LogIn size={18} />
+                  <div>Sign In</div>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const JobListApplicantSection = ({
   list,
@@ -14,11 +15,14 @@ const JobListApplicantSection = ({
 }: {
   list?: Job[];
   dataJob?: Job;
-  id: any;
+  id?: any;
 }) => {
   const setJobs = useJobs((state) => state.setJobs);
 
   let router = useRouter();
+
+  const { data: session, status } = useSession();
+
   useEffect(() => {
     if (list && list.length > 0) {
       setJobs(list);
@@ -41,6 +45,14 @@ const JobListApplicantSection = ({
       })
       .join('\n');
   };
+
+  if (status === 'loading') {
+    return (
+      <div className=' h-[768px]  flex justify-center items-center'>
+        loading...
+      </div>
+    );
+  }
 
   return (
     <div className='flex h-[768px] overflow-hidden gap-3 '>
@@ -81,10 +93,14 @@ const JobListApplicantSection = ({
                 </div>
               </div>
               <Button
-                className='font-bold h-8 w-[71px]'
-                onClick={() => router.push(`/apply-job/${id}`)}
+                className='font-bold h-8 w-auto'
+                onClick={() => {
+                  session
+                    ? router.push(`/apply-job/${id}`)
+                    : router.push('/login');
+                }}
               >
-                Apply
+                {session ? 'Apply' : 'Login to Apply'}
               </Button>
             </div>
 

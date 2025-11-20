@@ -48,6 +48,7 @@ type WebCamGestureProps = {
   ) => void; // Custom draw function
   customGestureSequence?: any[]; // Menambahkan properti customGestureSequence
   keyCustomGestureSequence?: 'string' | 'number';
+  withLine?: boolean;
 };
 
 export default function WebCamGesture({
@@ -61,6 +62,7 @@ export default function WebCamGesture({
   onDrawHandInfo,
   customGestureSequence = [1, 2, 3], // Default urutan gesture 1-2-3
   keyCustomGestureSequence = 'number',
+  withLine = false,
 }: WebCamGestureProps) {
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -166,29 +168,43 @@ export default function WebCamGesture({
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (!lm || lm.length === 0) return;
 
-      HAND_CONNECTIONS.forEach(([startIdx, endIdx]) => {
-        const start = lm[startIdx];
-        const end = lm[endIdx];
-        ctx.beginPath();
-        ctx.moveTo(start.x * canvas.width, start.y * canvas.height);
-        ctx.lineTo(end.x * canvas.width, end.y * canvas.height);
-        ctx.strokeStyle = 'green';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      });
+      const offsetX = -45; // offset yang kamu pakai
 
-      lm.forEach((point) => {
-        ctx.beginPath();
-        ctx.arc(
-          point.x * canvas.width,
-          point.y * canvas.height,
-          5,
-          0,
-          2 * Math.PI
-        );
-        ctx.fillStyle = 'red';
-        ctx.fill();
-      });
+      // Garis hijau (connections)
+      {
+        withLine &&
+          HAND_CONNECTIONS.forEach(([startIdx, endIdx]) => {
+            const start = lm[startIdx];
+            const end = lm[endIdx];
+
+            ctx.beginPath();
+            ctx.moveTo(
+              start.x * canvas.width + offsetX,
+              start.y * canvas.height
+            );
+            ctx.lineTo(end.x * canvas.width + offsetX, end.y * canvas.height);
+
+            ctx.strokeStyle = 'green';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          });
+      }
+      {
+        withLine &&
+          // Titik merah (landmarks)
+          lm.forEach((point) => {
+            ctx.beginPath();
+            ctx.arc(
+              point.x * canvas.width + offsetX, // tambahkan offset!
+              point.y * canvas.height,
+              5,
+              0,
+              2 * Math.PI
+            );
+            ctx.fillStyle = 'red';
+            ctx.fill();
+          });
+      }
 
       // Bounding box
       const xs = lm.map((p) => p.x * canvas.width);
@@ -253,16 +269,21 @@ export default function WebCamGesture({
         drawHandInfo(result.landmarks[0], pose);
 
         if (!isDetecting) {
-          let newSequence = [...gestureSequence, pose];
           if (keyCustomGestureSequence === 'number') {
-            const lastStep = gestureSequence[gestureSequence.length - 1] || 0;
+            // === cegah pose duplikat dalam sequence ===
+            let newSequence = gestureSequence;
+            if (pose && !gestureSequence.includes(pose)) {
+              newSequence = [...gestureSequence, pose];
+            }
 
-            if (pose === lastStep + 1) {
+            // === logic original tapi cek duplikasi ===
+            if (pose && !gestureSequence.includes(pose)) {
               setGestureSequence(newSequence);
+
               if (newSequence.join('') === customGestureSequence.join('')) {
                 startCountdown();
               }
-            } else {
+            } else if (!pose) {
               newSequence = [1];
               setGestureSequence([1]);
             }
@@ -274,7 +295,6 @@ export default function WebCamGesture({
             );
 
             let newSequence = [...gestureSequence, pose];
-            console.log(newSequence, pose);
 
             if (
               lastPoseIndex !== -1 &&

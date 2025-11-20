@@ -19,9 +19,9 @@ const ApplyJob = async ({ params }: { params: Promise<{ id: string }> }) => {
   const data = await res.json();
   const job: Job = data;
   return (
-    // <ProtectLayout>
-    <ApplyJobSection dataJob={job} />
-    // </ProtectLayout>
+    <ProtectLayout>
+      <ApplyJobSection dataJob={job} />
+    </ProtectLayout>
   );
 };
 
