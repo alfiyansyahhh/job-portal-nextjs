@@ -82,7 +82,7 @@ Job Portal – Hiring Management Web App adalah aplikasi web interaktif yang dir
 
 ```bash
 # Clone repository, masuk ke folder, dan install dependencies
-git clone [https://github.com/username/nama-proyek.git](https://github.com/alfiyansyahhh/job-portal-nextjs.git) && cd job-portal-nextjs
+git clone https://github.com/alfiyansyahhh/job-portal-nextjs.git && cd job-portal-nextjs
 npm install
 # atau jika pakai yarn
 # yarn install
