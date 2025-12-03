@@ -7,7 +7,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/login');
+    router.push('/job-list-candidate');
   }, [router]);
 };
 

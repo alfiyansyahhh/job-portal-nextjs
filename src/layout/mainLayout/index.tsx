@@ -50,7 +50,9 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
                 <DropdownMenuItem
                   onClick={() => {
                     localStorage.clear();
-                    signOut();
+                    signOut({
+                      callbackUrl: '/job-list-candidate',
+                    });
                   }}
                 >
                   <LogOut size={18} />
@@ -59,7 +61,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
               ) : (
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push('login');
+                    router.push('/login');
                   }}
                 >
                   <LogIn size={18} />
